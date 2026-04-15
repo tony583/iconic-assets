@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Greenfield — Iconic Investors</title>
+<style>
+  :root {
+    --forest: #1a3c2e;
+    --gold: #c9a84c;
+    --cream: #f8f5f0;
+    --green-mid: #2d6a4f;
+    --green-light: #e8f5ee;
+    --text: #1a1a1a;
+    --text-muted: #6b7280;
+    --border: #e5e0d8;
+    --sidebar-w: 230px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--cream); color: var(--text); display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: var(--sidebar-w);
+    background: var(--forest);
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    overflow-y: auto;
+    z-index: 100;
+    padding: 0 0 2rem;
+  }
+  .sidebar-logo {
+    padding: 1.5rem 1.25rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 0.5rem;
+  }
+  .sidebar-logo .brand { color: #fff; font-size: 1rem; font-weight: 800; letter-spacing: -0.01em; }
+  .sidebar-logo .sub { color: rgba(255,255,255,0.4); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.2rem; }
+  .sidebar nav a {
+    display: flex; align-items: center; gap: 0.6rem;
+    padding: 0.6rem 1.25rem;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    font-size: 0.78rem;
+    font-weight: 500;
+    transition: all 0.15s;
+    border-left: 3px solid transparent;
+  }
+  .sidebar nav a:hover, .sidebar nav a.active {
+    color: #fff;
+    background: rgba(255,255,255,0.07);
+    border-left-color: var(--gold);
+  }
+  .sidebar nav .section-num {
+    background: rgba(201,168,76,0.2);
+    color: var(--gold);
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 0.15rem 0.35rem;
+    border-radius: 3px;
+    min-width: 1.4rem;
+    text-align: center;
+  }
+
+  /* MAIN */
+  .main { margin-left: var(--sidebar-w); flex: 1; }
+
+  /* SECTIONS */
+  .section { min-height: 100vh; padding: 4rem 3.5rem; border-bottom: 1px solid var(--border); }
+  .section:nth-child(even) { background: #fff; }
+
+  /* COVER */
+  .cover {
+    background: var(--forest) !important;
+    display: flex; flex-direction: column; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute; top: -20%; right: -10%;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
+  }
+  .cover-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold);
+    font-size: 0.7rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    padding: 0.4rem 0.9rem; border-radius: 100px;
+    margin-bottom: 2rem;
+  }
+  .cover h1 { font-size: 3.2rem; font-weight: 900; color: #fff; line-height: 1.08; margin-bottom: 1rem; max-width: 700px; }
+  .cover h1 span { color: var(--gold); }
+  .cover .subtitle { font-size: 1.1rem; color: rgba(255,255,255,0.55); margin-bottom: 3rem; max-width: 500px; line-height: 1.6; }
+  .cover-meta { display: flex; gap: 2rem; flex-wrap: wrap; }
+  .cover-meta-item { }
+  .cover-meta-item .label { color: rgba(255,255,255,0.35); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; }
+  .cover-meta-item .value { color: #fff; font-size: 0.9rem; font-weight: 600; margin-top: 0.2rem; }
+  .cover-footer { position: absolute; bottom: 2rem; right: 3.5rem; color: rgba(255,255,255,0.2); font-size: 0.7rem; }
+
+  /* HEADINGS */
+  .section-eyebrow { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 0.5rem; }
+  .section-title { font-size: 2.2rem; font-weight: 900; color: var(--forest); line-height: 1.15; margin-bottom: 0.75rem; }
+  .section-title span { color: var(--gold); }
+  .section-sub { font-size: 1rem; color: var(--text-muted); max-width: 600px; line-height: 1.65; margin-bottom: 2.5rem; }
+
+  /* CARDS */
+  .cards { display: grid; gap: 1.25rem; }
+  .cards.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .cards.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .cards.cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .card {
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+  .card.dark { background: var(--forest); border-color: var(--forest); color: #fff; }
+  .card.gold-border { border-color: var(--gold); }
+  .card-icon { font-size: 1.6rem; margin-bottom: 0.75rem; }
+  .card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--forest); }
+  .card.dark h3 { color: #fff; }
+  .card p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+  .card.dark p { color: rgba(255,255,255,0.6); }
+
+  /* STAT BOXES */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2.5rem; }
+  .stat { background: var(--forest); border-radius: 12px; padding: 1.5rem; text-align: center; }
+  .stat .num { font-size: 2.2rem; font-weight: 900; color: var(--gold); }
+  .stat .lbl { font-size: 0.72rem; color: rgba(255,255,255,0.55); margin-top: 0.3rem; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  /* BADGE */
+  .badge { display: inline-block; background: var(--green-light); color: var(--forest); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.25rem 0.6rem; border-radius: 4px; }
+  .badge.gold { background: rgba(201,168,76,0.15); color: #8b6d1e; }
+  .badge.red { background: #fef2f2; color: #991b1b; }
+
+  /* EMAIL MOCKUP */
+  .email-mock { background: #fff; border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; }
+  .email-mock-header { background: var(--forest); padding: 1rem 1.25rem; display: flex; justify-content: space-between; align-items: center; }
+  .email-mock-header .day-badge { background: var(--gold); color: #000; font-size: 0.65rem; font-weight: 800; padding: 0.2rem 0.6rem; border-radius: 4px; }
+  .email-mock-header .subject { color: #fff; font-size: 0.85rem; font-weight: 600; }
+  .email-mock-body { padding: 1.5rem; font-size: 0.85rem; line-height: 1.75; color: var(--text); }
+  .email-mock-body ul { padding-left: 1.25rem; margin: 0.75rem 0; }
+  .email-mock-body ul li { margin-bottom: 0.3rem; }
+  .email-cta { display: inline-block; background: var(--forest); color: #fff; padding: 0.6rem 1.25rem; border-radius: 6px; font-weight: 700; font-size: 0.82rem; margin: 0.75rem 0; text-decoration: none; }
+  .email-sig { border-top: 1px solid var(--border); padding-top: 0.75rem; margin-top: 0.75rem; font-size: 0.78rem; color: var(--text-muted); }
+
+  /* SMS MOCKUP */
+  .sms-phones { display: flex; gap: 2rem; }
+  .sms-phone { flex: 1; }
+  .sms-phone .day { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; text-align: center; margin-bottom: 0.75rem; }
+  .sms-screen { background: #f0f0f0; border-radius: 24px; padding: 1.5rem 1rem; min-height: 200px; }
+  .sms-bubble { background: var(--forest); color: #fff; border-radius: 16px 16px 4px 16px; padding: 0.75rem 1rem; font-size: 0.8rem; line-height: 1.55; max-width: 85%; margin-left: auto; }
+  .sms-link { color: var(--gold); text-decoration: underline; }
+
+  /* PHONE SCRIPT */
+  .script-block { background: var(--cream); border-left: 4px solid var(--forest); border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+  .script-block.alt { border-left-color: var(--gold); }
+  .script-label { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 0.4rem; }
+  .script-block.alt .script-label { color: var(--forest); }
+  .script-text { font-size: 0.85rem; line-height: 1.7; color: var(--text); font-style: italic; }
+
+  /* PIPELINE */
+  .pipeline { display: flex; align-items: center; flex-wrap: wrap; gap: 0; margin: 1.5rem 0; }
+  .pipe-stage { flex: 1; min-width: 80px; text-align: center; position: relative; }
+  .pipe-stage:not(:last-child)::after {
+    content: '→';
+    position: absolute; right: -8px; top: 50%; transform: translateY(-50%);
+    color: var(--gold); font-weight: 900; font-size: 0.9rem; z-index: 1;
+  }
+  .pipe-dot { width: 36px; height: 36px; border-radius: 50%; background: var(--forest); color: #fff; font-size: 0.65rem; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.4rem; }
+  .pipe-stage.lost .pipe-dot { background: #9ca3af; }
+  .pipe-stage.win .pipe-dot { background: var(--gold); color: #000; }
+  .pipe-name { font-size: 0.62rem; font-weight: 600; color: var(--text-muted); line-height: 1.3; }
+
+  /* CHECKLIST */
+  .checklist { list-style: none; }
+  .checklist li { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border); font-size: 0.875rem; }
+  .checklist li:last-child { border-bottom: none; }
+  .check-box { width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 4px; flex-shrink: 0; margin-top: 0.1rem; }
+  .check-box.done { background: var(--forest); border-color: var(--forest); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.7rem; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th { background: var(--forest); color: #fff; padding: 0.75rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; }
+  td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); }
+  tr:nth-child(even) td { background: var(--cream); }
+
+  /* AD MOCKUP */
+  .ad-mock { background: #fff; border: 1px solid #ddd; border-radius: 10px; overflow: hidden; max-width: 360px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+  .ad-mock-header { padding: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+  .ad-avatar { width: 36px; height: 36px; background: var(--forest); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.75rem; font-weight: 800; }
+  .ad-page { font-size: 0.78rem; font-weight: 700; }
+  .ad-sponsored { font-size: 0.68rem; color: #888; }
+  .ad-image { width: 100%; height: 160px; background: linear-gradient(135deg, var(--forest) 0%, var(--green-mid) 100%); display: flex; align-items: center; justify-content: center; padding: 1.5rem; text-align: center; }
+  .ad-image .ad-headline { color: #fff; font-size: 1.1rem; font-weight: 900; line-height: 1.25; }
+  .ad-image .ad-headline span { color: var(--gold); }
+  .ad-body { padding: 0.75rem; }
+  .ad-body .ad-url { font-size: 0.68rem; color: #888; text-transform: uppercase; }
+  .ad-body .ad-text { font-size: 0.82rem; color: var(--text); line-height: 1.5; margin: 0.4rem 0; }
+  .ad-cta { background: var(--forest); color: #fff; text-align: center; padding: 0.6rem; font-size: 0.8rem; font-weight: 700; margin: 0.5rem 0.75rem 0.75rem; border-radius: 6px; }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before { content: ''; position: absolute; left: 0.5rem; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .tl-item { position: relative; padding-bottom: 2rem; }
+  .tl-dot { position: absolute; left: -1.6rem; top: 0.2rem; width: 18px; height: 18px; background: var(--forest); border-radius: 50%; border: 3px solid var(--cream); }
+  .tl-item.gold .tl-dot { background: var(--gold); }
+  .tl-week { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 0.3rem; }
+  .tl-title { font-size: 1rem; font-weight: 700; color: var(--forest); margin-bottom: 0.4rem; }
+  .tl-items { list-style: none; }
+  .tl-items li { font-size: 0.82rem; color: var(--text-muted); padding: 0.2rem 0; padding-left: 1rem; position: relative; }
+  .tl-items li::before { content: '→'; position: absolute; left: 0; color: var(--gold); }
+
+  /* SIGNOFF */
+  .signoff-item { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem 1.25rem; background: #fff; border: 1.5px solid var(--border); border-radius: 10px; margin-bottom: 0.75rem; }
+  .signoff-num { width: 28px; height: 28px; background: var(--forest); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 800; flex-shrink: 0; }
+  .signoff-text strong { display: block; font-size: 0.9rem; color: var(--forest); margin-bottom: 0.2rem; }
+  .signoff-text span { font-size: 0.8rem; color: var(--text-muted); }
+
+  /* LANDING PAGE MOCK */
+  .lp-mock { background: var(--forest); border-radius: 14px; padding: 2.5rem; color: #fff; }
+  .lp-mock h2 { font-size: 1.8rem; font-weight: 900; margin-bottom: 0.75rem; }
+  .lp-mock h2 span { color: var(--gold); }
+  .lp-mock p { color: rgba(255,255,255,0.6); font-size: 0.9rem; line-height: 1.65; margin-bottom: 1.5rem; }
+  .lp-props { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1.5rem; }
+  .lp-prop { background: rgba(255,255,255,0.08); border-radius: 8px; padding: 0.6rem 0.8rem; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
+  .lp-prop span { color: var(--gold); }
+  .lp-process { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .lp-step { flex: 1; min-width: 80px; text-align: center; }
+  .lp-step-num { width: 32px; height: 32px; background: var(--gold); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; margin: 0 auto 0.4rem; }
+  .lp-step p { color: rgba(255,255,255,0.7); font-size: 0.7rem; }
+  .lp-form { background: #fff; border-radius: 10px; padding: 1.25rem; }
+  .lp-form h4 { color: var(--forest); font-size: 0.9rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem; }
+  .form-field { background: var(--cream); border-radius: 6px; padding: 0.6rem 0.75rem; font-size: 0.75rem; color: var(--text-muted); }
+  .form-btn { background: var(--forest); color: #fff; text-align: center; padding: 0.75rem; border-radius: 6px; font-weight: 700; font-size: 0.85rem; margin-top: 0.5rem; }
+
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    .section { padding: 2.5rem 1.5rem; }
+    .cards.cols-3, .cards.cols-4 { grid-template-columns: 1fr; }
+    .cards.cols-2 { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: repeat(2,1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">Iconic Investors</div>
+    <div class="sub">AFSL 450822</div>
+  </div>
+  <nav>
+    <a href="#cover"><span class="section-num">00</span> Cover</a>
+    <a href="#opportunity"><span class="section-num">01</span> The Opportunity</a>
+    <a href="#audience"><span class="section-num">02</span> Audience Profile</a>
+    <a href="#emails"><span class="section-num">03</span> Email Sequence</a>
+    <a href="#sms"><span class="section-num">04</span> SMS Sequence</a>
+    <a href="#phone"><span class="section-num">05</span> Phone Script</a>
+    <a href="#landing"><span class="section-num">06</span> Landing Page</a>
+    <a href="#onepager"><span class="section-num">07</span> One-Pager</a>
+    <a href="#onboarding"><span class="section-num">08</span> Onboarding</a>
+    <a href="#pipeline"><span class="section-num">09</span> GHL Pipeline</a>
+    <a href="#linkedin"><span class="section-num">10</span> LinkedIn</a>
+    <a href="#timeline"><span class="section-num">11</span> Timeline</a>
+    <a href="#signoff"><span class="section-num">12</span> Sign-Off</a>
+  </nav>
+</aside>
+
+<main class="main">
+
+<!-- 00 COVER -->
+<section class="section cover" id="cover">
+  <div class="cover-badge">⚡ Confidential — Internal Strategy Document</div>
+  <h1>Project <span>Greenfield</span><br>Displaced Adviser<br>Acquisition Campaign</h1>
+  <p class="subtitle">SMSF Adviser Network (AFSL 430062) ceased operations 7 April 2026. 80 advisers need a new AFSL home. Iconic Investors is the answer.</p>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <div class="label">Prepared by</div>
+      <div class="value">ARIA — Chief of Staff</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Date</div>
+      <div class="value">April 2026</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Target AFSL</div>
+      <div class="value">AFSL 430062 Closure</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Iconic AFSL</div>
+      <div class="value">450822</div>
+    </div>
+  </div>
+  <div class="cover-footer">iconicinvestors.com.au</div>
+</section>
+
+<!-- 01 OPPORTUNITY -->
+<section class="section" id="opportunity">
+  <div class="section-eyebrow">01 — The Opportunity</div>
+  <h2 class="section-title">80 Advisers.<br><span>No AFSL Home.</span> Right Now.</h2>
+  <p class="section-sub">SMSF Adviser Network (AFSL 430062) closed its doors on 7 April 2026. Every one of its 80 authorised representatives is now operating without a licence. They need a new dealer group — urgently.</p>
+
+  <div class="stats">
+    <div class="stat"><div class="num">80</div><div class="lbl">Displaced Advisers</div></div>
+    <div class="stat"><div class="num">29</div><div class="lbl">Have Email (contactable now)</div></div>
+    <div class="stat"><div class="num">35</div><div class="lbl">Have Phone Numbers</div></div>
+    <div class="stat"><div class="num">7</div><div class="lbl">Days Since Closure</div></div>
+  </div>
+
+  <div class="cards cols-3">
+    <div class="card gold-border">
+      <div class="card-icon">⏰</div>
+      <h3>Urgency is Real</h3>
+      <p>Every week without an AFSL means they cannot legally provide advice. Their clients are at risk. They are losing income. The window is now.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🏛️</div>
+      <h3>Iconic's Perfect Fit</h3>
+      <p>SMSF-specialist friendly. Flat fee model. Boutique support. Fast 2–4 week onboarding. Exactly what these advisers need.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📈</div>
+      <h3>Revenue Opportunity</h3>
+      <p>Each new AR represents recurring annual flat-fee revenue. Even converting 10% of 80 advisers = 8 new ARs onboarded from one campaign.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 02 AUDIENCE -->
+<section class="section" id="audience">
+  <div class="section-eyebrow">02 — Target Audience</div>
+  <h2 class="section-title">Who Are <span>These Advisers?</span></h2>
+  <p class="section-sub">All 80 were Authorised Representatives under SMSF Adviser Network — a specialist AFSL focused on SMSF and superannuation advice. Mostly accounting firm-based, not aligned to the big institutions.</p>
+
+  <div class="cards cols-2" style="margin-bottom:2rem">
+    <div class="card">
+      <h3>📍 State Breakdown</h3>
+      <table style="margin-top:0.75rem">
+        <thead><tr><th>State</th><th>Count</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>VIC</td><td>7</td><td><span class="badge">Confirmed</span></td></tr>
+          <tr><td>NSW</td><td>6</td><td><span class="badge">Confirmed</span></td></tr>
+          <tr><td>QLD</td><td>5</td><td><span class="badge">Confirmed</span></td></tr>
+          <tr><td>WA</td><td>3</td><td><span class="badge">Confirmed</span></td></tr>
+          <tr><td>ACT</td><td>2</td><td><span class="badge">Confirmed</span></td></tr>
+          <tr><td>TAS</td><td>1</td><td><span class="badge">Confirmed</span></td></tr>
+          <tr><td>NT</td><td>1</td><td><span class="badge">Confirmed</span></td></tr>
+          <tr><td>State TBC</td><td>55</td><td><span class="badge gold">Researching</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <h3>😰 Their Pain Points</h3>
+        <ul style="margin-top:0.5rem;padding-left:1.25rem;font-size:0.82rem;color:#6b7280;line-height:1.8">
+          <li>Cannot legally advise clients right now</li>
+          <li>Clients calling asking what's happening</li>
+          <li>Urgent need — every week = lost income</li>
+          <li>Don't want to land in a corporate machine</li>
+          <li>Worried about complex, slow onboarding</li>
+          <li>Concerned about revenue share eating margins</li>
+        </ul>
+      </div>
+      <div class="card gold-border">
+        <h3>✅ What They Want</h3>
+        <ul style="margin-top:0.5rem;padding-left:1.25rem;font-size:0.82rem;color:#6b7280;line-height:1.8">
+          <li>Fast — authorised ASAP</li>
+          <li>Simple — one fee, no surprises</li>
+          <li>SMSF-friendly — understands their clients</li>
+          <li>Boutique — a real person to call</li>
+          <li>Independent — no conflicts of interest</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 EMAILS -->
+<section class="section" id="emails">
+  <div class="section-eyebrow">03 — Email Sequence</div>
+  <h2 class="section-title">3-Email <span>Outreach Sequence</span></h2>
+  <p class="section-sub">Peer-to-peer tone. Direct, honest, no fluff. Each email has one job.</p>
+
+  <!-- EMAIL 1 -->
+  <div class="email-mock">
+    <div class="email-mock-header">
+      <div class="subject">📧 Your next step after SMSF Adviser Network</div>
+      <div class="day-badge">DAY 1</div>
+    </div>
+    <div class="email-mock-body">
+      <p>Hi [First Name],</p><br>
+      <p>You'll be aware that SMSF Adviser Network (AFSL 430062) ceased operations on 7 April 2026.</p><br>
+      <p>I'm Tony Zulli, Managing Director of Iconic Investors — an AFSL-licensed dealer group (AFSL 450822) based in Sydney, specialising in supporting independent financial planners.</p><br>
+      <p>If you're weighing your options for where to operate next, I'd like to have an honest conversation.</p><br>
+      <p><strong>What Iconic offers:</strong></p>
+      <ul>
+        <li>Operate immediately under our AFSL 450822</li>
+        <li>One flat fee — no revenue share, no hidden costs</li>
+        <li>Tailored compliance framework and supervision</li>
+        <li>SMSF specialist-friendly — we understand your clients</li>
+        <li>Fast onboarding — typically 2–4 weeks</li>
+        <li>Boutique support — not a corporate machine</li>
+      </ul><br>
+      <p>We're not the right fit for everyone. But if you value independence, straightforward pricing and a team that actually picks up the phone — it's worth 15 minutes.</p><br>
+      <a class="email-cta">📅 Book a call with Tony Zulli →</a>
+      <div class="email-sig">
+        Tony Zulli<br>
+        Managing Director — Iconic Investors<br>
+        AFSL 450822 | iconicinvestors.com.au<br>
+        info@iconicinvestors.com.au
+      </div>
+    </div>
+  </div>
+
+  <!-- EMAIL 2 -->
+  <div class="email-mock">
+    <div class="email-mock-header">
+      <div class="subject">📧 Re: Your next step after SMSF Adviser Network</div>
+      <div class="day-badge">DAY 5</div>
+    </div>
+    <div class="email-mock-body">
+      <p>Hi [First Name],</p><br>
+      <p>Just following up on my email from earlier this week.</p><br>
+      <p>I know this is a busy time — working out your next move, managing clients, dealing with the fallout from the closure. I'll keep this short.</p><br>
+      <p>If you have 15 minutes this week, I'd be happy to walk you through how Iconic works and answer any questions — no obligation, no sales pitch.</p><br>
+      <a class="email-cta" href="https://api.leadconnectorhq.com/widget/booking/EES2gzrU89UBYJYY3l2p" target="_blank">📅 Book a time here →</a><br><br>
+      <p>If the timing isn't right, no problem at all. Just reply and let me know.</p>
+      <div class="email-sig">
+        Tony Zulli<br>
+        Managing Director — Iconic Investors | AFSL 450822
+      </div>
+    </div>
+  </div>
+
+  <!-- EMAIL 3 -->
+  <div class="email-mock">
+    <div class="email-mock-header">
+      <div class="subject">📧 What to look for in your next dealer group</div>
+      <div class="day-badge">DAY 12</div>
+    </div>
+    <div class="email-mock-body">
+      <p>Hi [First Name],</p><br>
+      <p>One more note — then I'll leave you to it.</p><br>
+      <p>A few things worth considering as you evaluate dealer groups:</p><br>
+      <p><strong>1. Fee structure</strong><br>Some groups charge a percentage of revenue. Others charge flat fees. Know exactly what you're paying. Iconic charges one flat fee — all inclusive.</p><br>
+      <p><strong>2. Compliance support</strong><br>Will you get a dedicated compliance manager, or a shared mailbox? Ask specifically how supervision and file reviews work.</p><br>
+      <p><strong>3. Speed of onboarding</strong><br>If you're currently unregistered, every week matters. Ask how long it takes from application to being live. Iconic: 2–4 weeks.</p><br>
+      <p><strong>4. SMSF expertise</strong><br>Not all dealer groups understand the SMSF space. We do — it's core to what we've built.</p><br>
+      <a class="email-cta" href="https://api.leadconnectorhq.com/widget/booking/EES2gzrU89UBYJYY3l2p" target="_blank">📅 Book a call →</a>
+      <div class="email-sig">
+        Tony Zulli<br>
+        Managing Director — Iconic Investors | AFSL 450822
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 SMS -->
+<section class="section" id="sms">
+  <div class="section-eyebrow">04 — SMS Sequence</div>
+  <h2 class="section-title">SMS <span>Follow-Up</span></h2>
+  <p class="section-sub">Short, personal, direct. Sent from Tony Zulli's number. Complement to the email sequence.</p>
+  <div class="sms-phones">
+    <div class="sms-phone">
+      <div class="day">📱 SMS 1 — Day 2</div>
+      <div class="sms-screen">
+        <div class="sms-bubble">
+          Hi [First Name], Tony Zulli from Iconic Investors here. I sent you an email about your options following the SMSF Adviser Network closure. Happy to chat if useful — no obligation. Reply here or book a call: <span class="sms-link">https://api.leadconnectorhq.com/widget/booking/EES2gzrU89UBYJYY3l2p</span>
+        </div>
+      </div>
+    </div>
+    <div class="sms-phone">
+      <div class="day">📱 SMS 2 — Day 7</div>
+      <div class="sms-screen">
+        <div class="sms-bubble">
+          Hi [First Name], just checking in. If you're still weighing up your AFSL options, I'd love 15 mins. Iconic Investors — flat fee, fast onboarding, SMSF-friendly. <span class="sms-link">https://api.leadconnectorhq.com/widget/booking/EES2gzrU89UBYJYY3l2p</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 PHONE -->
+<section class="section" id="phone">
+  <div class="section-eyebrow">05 — Phone Script</div>
+  <h2 class="section-title">Cold Call <span>Script</span></h2>
+  <p class="section-sub">For advisers with phone numbers only (no email). Warm, direct, peer-to-peer. Not a pitch — a conversation.</p>
+
+  <div class="script-block">
+    <div class="script-label">Opening</div>
+    <div class="script-text">"Hi, is this [Full Name]? … Hi [First Name], my name is Tony Zulli — I'm the Managing Director of Iconic Investors, an AFSL-licensed dealer group based in Sydney. I'm calling because I understand you were previously authorised under SMSF Adviser Network, and I wanted to reach out directly. Do you have two minutes?"</div>
+  </div>
+
+  <div class="script-block alt">
+    <div class="script-label">If Yes — Continue</div>
+    <div class="script-text">"I know the closure has been disruptive. We've been reaching out to advisers from the network because Iconic is well set up for SMSF specialists — we're boutique, we charge a flat fee, and we can typically get someone authorised and operating within two to four weeks. I'm not trying to sell you anything today — I just wanted to introduce myself and see if it's worth a proper conversation. Would you be open to a 15-minute call this week?"</div>
+  </div>
+
+  <div class="script-block">
+    <div class="script-label">If They Ask About Cost</div>
+    <div class="script-text">"We charge one flat annual fee — everything included. No revenue share, no percentages. I'll send you the detail after this call so you can compare properly."</div>
+  </div>
+
+  <div class="script-block alt">
+    <div class="script-label">If Already Sorted</div>
+    <div class="script-text">"No problem at all — glad you've got a path forward. If anything changes or you want a second opinion down the track, feel free to reach out. Can I send you our one-pager just in case?"</div>
+  </div>
+
+  <div class="script-block">
+    <div class="script-label">Closing</div>
+    <div class="script-text">"I'll send you a quick email with our details and a link to book a time. What's the best email for you? … Perfect. Speak soon, [First Name]."</div>
+  </div>
+</section>
+
+<!-- 06 LANDING PAGE -->
+<section class="section" id="landing">
+  <div class="section-eyebrow">06 — Landing Page</div>
+  <h2 class="section-title">Campaign Landing Page<br><span>/afsl-transition</span></h2>
+  <p class="section-sub">Dedicated conversion page for displaced advisers. Every element drives toward one action: book a call with Tony Zulli.</p>
+
+  <div class="lp-mock">
+    <div style="font-size:0.68rem;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem">iconicinvestors.com.au/afsl-transition</div>
+    <h2>Your <span>AFSL Home</span> After<br>SMSF Adviser Network</h2>
+    <p>Iconic Investors (AFSL 450822) is actively onboarding displaced advisers from the SMSF Adviser Network closure. Flat fee. Fast start. SMSF specialist support.</p>
+    <div class="lp-props">
+      <div class="lp-prop"><span>✅</span> AFSL 450822 — 30+ years</div>
+      <div class="lp-prop"><span>✅</span> One flat fee, no revenue share</div>
+      <div class="lp-prop"><span>✅</span> SMSF specialist-friendly</div>
+      <div class="lp-prop"><span>✅</span> Onboarding in 2–4 weeks</div>
+      <div class="lp-prop"><span>✅</span> Dedicated compliance support</div>
+      <div class="lp-prop"><span>✅</span> Boutique — you'll know our name</div>
+    </div>
+    <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem">How It Works</div>
+    <div class="lp-process">
+      <div class="lp-step"><div class="lp-step-num">1</div><p>15-min call</p></div>
+      <div class="lp-step"><div class="lp-step-num">2</div><p>Application sent</p></div>
+      <div class="lp-step"><div class="lp-step-num">3</div><p>Docs submitted</p></div>
+      <div class="lp-step"><div class="lp-step-num">4</div><p>Review (5 days)</p></div>
+      <div class="lp-step"><div class="lp-step-num">5</div><p>You're live ✅</p></div>
+    </div>
+    <div class="lp-form">
+      <h4>Request a Callback</h4>
+      <div class="form-grid">
+        <div class="form-field">Full name</div>
+        <div class="form-field">Email address</div>
+        <div class="form-field">Phone number</div>
+        <div class="form-field">State</div>
+        <div class="form-field">ASIC Rep No. (optional)</div>
+        <div class="form-field">Tell us about your practice</div>
+      </div>
+      <a href="https://api.leadconnectorhq.com/widget/booking/EES2gzrU89UBYJYY3l2p" target="_blank" class="form-btn" style="display:block;text-decoration:none">📅 Book a Call with Tony Zulli →</a>
+    </div>
+  </div>
+</section>
+
+<!-- 07 ONE-PAGER -->
+<section class="section" id="onepager">
+  <div class="section-eyebrow">07 — One-Pager</div>
+  <h2 class="section-title">Iconic Investors <span>One-Pager</span></h2>
+  <p class="section-sub">Leave-behind document for calls and meetings. Clean A4 layout. PDF-ready.</p>
+
+  <div style="background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:2.5rem;max-width:700px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:2px solid var(--forest)">
+      <div>
+        <div style="font-size:1.4rem;font-weight:900;color:var(--forest)">Iconic Investors</div>
+        <div style="font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:0.2rem">AFSL 450822 | ACN 167 051 470</div>
+      </div>
+      <div style="text-align:right">
+        <div style="background:var(--forest);color:#fff;padding:0.4rem 0.9rem;border-radius:6px;font-size:0.75rem;font-weight:700">YOUR AFSL HOME</div>
+      </div>
+    </div>
+    <div style="font-size:1rem;font-weight:700;color:var(--forest);margin-bottom:0.4rem">Who We Are</div>
+    <p style="font-size:0.82rem;color:var(--text-muted);line-height:1.65;margin-bottom:1.5rem">Iconic Investors is an AFSL-licensed dealer group (AFSL 450822) providing authorised representative services to independent financial planners across Australia. Led by Tony Zulli with 30+ years of financial services industry experience.</p>
+    <div style="font-size:1rem;font-weight:700;color:var(--forest);margin-bottom:0.75rem">What We Offer</div>
+    <table style="margin-bottom:1.5rem">
+      <thead><tr><th>Service</th><th>What's Included</th></tr></thead>
+      <tbody>
+        <tr><td><strong>AFSL Authorisation</strong></td><td>Comprehensive, limited and general advice</td></tr>
+        <tr><td><strong>Compliance & Risk</strong></td><td>Tailored supervision and monitoring program</td></tr>
+        <tr><td><strong>Advice Management</strong></td><td>Personalised oversight and review process</td></tr>
+        <tr><td><strong>Digital Operations</strong></td><td>Fully digital advice delivery and admin</td></tr>
+        <tr><td><strong>Business Development</strong></td><td>Strategic growth and practice development</td></tr>
+        <tr><td><strong>Exit Strategies</strong></td><td>Practice succession and exit planning</td></tr>
+        <tr><td><strong>Flat Fee Pricing</strong></td><td>One annual fee — everything included</td></tr>
+      </tbody>
+    </table>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem">
+      <div style="background:var(--green-light);border-radius:8px;padding:1rem">
+        <div style="font-size:0.75rem;font-weight:700;color:var(--forest);margin-bottom:0.5rem">Why Advisers Choose Iconic</div>
+        <ul style="font-size:0.75rem;color:var(--text-muted);line-height:1.8;padding-left:1rem">
+          <li>No revenue share — keep what you earn</li>
+          <li>Boutique — real people, fast responses</li>
+          <li>SMSF specialist-friendly</li>
+          <li>Fast onboarding — 2 to 4 weeks</li>
+          <li>Peer network — Advice Collective</li>
+        </ul>
+      </div>
+      <div style="background:var(--forest);border-radius:8px;padding:1rem;color:#fff">
+        <div style="font-size:0.75rem;font-weight:700;color:var(--gold);margin-bottom:0.5rem">Onboarding Process</div>
+        <ol style="font-size:0.75rem;color:rgba(255,255,255,0.7);line-height:1.9;padding-left:1rem">
+          <li>Discovery call (15 mins)</li>
+          <li>AR Application submitted</li>
+          <li>Compliance review (5 days)</li>
+          <li>Authorisation confirmed</li>
+          <li>You're live — support begins</li>
+        </ol>
+      </div>
+    </div>
+    <div style="background:var(--cream);border-radius:8px;padding:1rem;font-size:0.78rem;color:var(--text-muted);display:flex;gap:2rem;flex-wrap:wrap">
+      <div><strong style="color:var(--forest)">Tony Zulli</strong><br>Managing Director</div>
+      <div>📧 info@iconicinvestors.com.au</div>
+      <div>🌐 iconicinvestors.com.au</div>
+      <div>📍 Forestville NSW 2087</div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 ONBOARDING -->
+<section class="section" id="onboarding">
+  <div class="section-eyebrow">08 — Onboarding Process</div>
+  <h2 class="section-title">What We Need From <span>New ARs</span></h2>
+  <p class="section-sub">Simple. Structured. Fast-tracked when documents are ready on day one.</p>
+
+  <div class="cards cols-2">
+    <div>
+      <div style="font-size:0.85rem;font-weight:700;color:var(--forest);margin-bottom:1rem">📋 Documents Required</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div>Completed AR Application Form (Iconic template)</li>
+        <li><div class="check-box"></div>Certified copy of ID (passport or driver's licence)</li>
+        <li><div class="check-box"></div>Professional Indemnity Insurance certificate</li>
+        <li><div class="check-box"></div>CPD log / training record (current financial year)</li>
+        <li><div class="check-box"></div>ASIC registration details / rep number</li>
+        <li><div class="check-box"></div>Current CV / professional profile</li>
+        <li><div class="check-box"></div>Compliance Declaration (Iconic template)</li>
+        <li><div class="check-box"></div>Previous dealer group termination/resignation letter</li>
+        <li><div class="check-box"></div>List of current clients (for transition planning)</li>
+        <li><div class="check-box"></div>Business structure details (ABN, entity name, address)</li>
+      </ul>
+    </div>
+    <div>
+      <div style="font-size:0.85rem;font-weight:700;color:var(--forest);margin-bottom:1rem">🔄 7-Step Process</div>
+      <div class="timeline">
+        <div class="tl-item gold">
+          <div class="tl-dot"></div>
+          <div class="tl-week">Step 1</div>
+          <div class="tl-title">Discovery Call</div>
+          <ul class="tl-items"><li>Tony Zulli confirms fit and answers questions (15 mins)</li></ul>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-week">Step 2</div>
+          <div class="tl-title">Application Pack Sent</div>
+          <ul class="tl-items"><li>Email with all forms and document checklist</li></ul>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-week">Step 3</div>
+          <div class="tl-title">Documents Submitted</div>
+          <ul class="tl-items"><li>Adviser returns completed pack to Iconic</li></ul>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-week">Step 4</div>
+          <div class="tl-title">Compliance Review</div>
+          <ul class="tl-items"><li>5 business days turnaround</li></ul>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-week">Step 5</div>
+          <div class="tl-title">ASIC Notification</div>
+          <ul class="tl-items"><li>Iconic notifies ASIC of new AR authorisation</li></ul>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-week">Step 6</div>
+          <div class="tl-title">Welcome Pack</div>
+          <ul class="tl-items"><li>Compliance manual, supervision schedule, key contacts</li></ul>
+        </div>
+        <div class="tl-item gold">
+          <div class="tl-dot"></div>
+          <div class="tl-week">Step 7</div>
+          <div class="tl-title">30-Day Check-In</div>
+          <ul class="tl-items"><li>First review call — all good to go</li></ul>
+        </div>
+      </div>
+      <div class="cards cols-2" style="margin-top:1.5rem">
+        <div class="card gold-border" style="text-align:center">
+          <div style="font-size:1.5rem;font-weight:900;color:var(--gold)">2 weeks</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.3rem">Fast Track<br>(all docs ready day 1)</div>
+        </div>
+        <div class="card" style="text-align:center">
+          <div style="font-size:1.5rem;font-weight:900;color:var(--forest)">3–4 weeks</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.3rem">Standard<br>onboarding</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 PIPELINE -->
+<section class="section" id="pipeline">
+  <div class="section-eyebrow">09 — GHL Pipeline</div>
+  <h2 class="section-title">Displaced Adviser <span>Pipeline</span></h2>
+  <p class="section-sub">11-stage pipeline in GoHighLevel to track every adviser from first contact to authorised AR.</p>
+
+  <div style="background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:2rem;overflow-x:auto;margin-bottom:2rem">
+    <div class="pipeline">
+      <div class="pipe-stage"><div class="pipe-dot">1</div><div class="pipe-name">New<br>Lead</div></div>
+      <div class="pipe-stage"><div class="pipe-dot">2</div><div class="pipe-name">Email<br>Sent</div></div>
+      <div class="pipe-stage"><div class="pipe-dot">3</div><div class="pipe-name">SMS<br>Sent</div></div>
+      <div class="pipe-stage"><div class="pipe-dot">4</div><div class="pipe-name">Followed<br>Up</div></div>
+      <div class="pipe-stage"><div class="pipe-dot">5</div><div class="pipe-name">Responded</div></div>
+      <div class="pipe-stage"><div class="pipe-dot">6</div><div class="pipe-name">Meeting<br>Booked</div></div>
+      <div class="pipe-stage"><div class="pipe-dot">7</div><div class="pipe-name">Docs<br>Sent</div></div>
+      <div class="pipe-stage"><div class="pipe-dot">8</div><div class="pipe-name">Docs<br>Received</div></div>
+      <div class="pipe-stage"><div class="pipe-dot">9</div><div class="pipe-name">Under<br>Review</div></div>
+      <div class="pipe-stage win"><div class="pipe-dot">✓</div><div class="pipe-name">AR<br>Authorised</div></div>
+      <div class="pipe-stage lost"><div class="pipe-dot">✕</div><div class="pipe-name">Lost</div></div>
+    </div>
+  </div>
+
+  <table>
+    <thead><tr><th>Stage</th><th>Trigger</th><th>Action Required</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1. New Lead</strong></td><td>Added to GHL from spreadsheet</td><td>Tag: displaced-adviser, afsl-430062</td></tr>
+      <tr><td><strong>2. Email Sent</strong></td><td>Email 1 sent</td><td>Move stage, log date</td></tr>
+      <tr><td><strong>3. SMS Sent</strong></td><td>SMS 1 sent Day 2</td><td>Automated via GHL workflow</td></tr>
+      <tr><td><strong>4. Followed Up</strong></td><td>Email 2 + SMS 2 sent</td><td>Day 5 and Day 7</td></tr>
+      <tr><td><strong>5. Responded</strong></td><td>Replied or called back</td><td>Book meeting immediately</td></tr>
+      <tr><td><strong>6. Meeting Booked</strong></td><td>Calendar confirmed</td><td>Send one-pager ahead of call</td></tr>
+      <tr><td><strong>7. Docs Sent</strong></td><td>Application pack emailed</td><td>Follow up in 3 days if not returned</td></tr>
+      <tr><td><strong>8. Docs Received</strong></td><td>All docs submitted</td><td>Pass to compliance team</td></tr>
+      <tr><td><strong>9. Under Review</strong></td><td>Compliance reviewing</td><td>5 business day SLA</td></tr>
+      <tr><td><strong>10. AR Authorised ✅</strong></td><td>ASIC notified</td><td>Send welcome pack, book 30-day call</td></tr>
+      <tr><td><strong>11. Lost</strong></td><td>Not interested / elsewhere</td><td>Tag reason, add to nurture list</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 10 LINKEDIN -->
+<section class="section" id="linkedin">
+  <div class="section-eyebrow">10 — LinkedIn Outreach</div>
+  <h2 class="section-title">LinkedIn <span>Message Templates</span></h2>
+  <p class="section-sub">For connecting with and messaging displaced advisers via LinkedIn. Short, direct, peer-to-peer. Connection request first — then message after they accept.</p>
+
+  <!-- CONNECTION REQUEST -->
+  <div style="margin-bottom:2rem">
+    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem">
+      <div style="background:var(--forest);color:#fff;font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;padding:0.25rem 0.7rem;border-radius:4px">Step 1 — Connection Request Note</div>
+      <div style="font-size:0.75rem;color:var(--text-muted)">300 character limit</div>
+    </div>
+    <div class="email-mock">
+      <div class="email-mock-header">
+        <div class="subject">🔗 Connection Request</div>
+        <div class="day-badge">DAY 1</div>
+      </div>
+      <div class="email-mock-body">
+        <p>Hi [First Name], I'm Tony Zulli — Director of Iconic Investors (AFSL 450822). I understand SMSF Adviser Network recently closed and you may be weighing your next move. Happy to connect and share what Iconic offers displaced advisers.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MESSAGE 1 - AFTER CONNECT -->
+  <div style="margin-bottom:2rem">
+    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem">
+      <div style="background:var(--forest);color:#fff;font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;padding:0.25rem 0.7rem;border-radius:4px">Step 2 — First Message (after they accept)</div>
+      <div style="font-size:0.75rem;color:var(--text-muted)">Send within 24hrs of connection</div>
+    </div>
+    <div class="email-mock">
+      <div class="email-mock-header">
+        <div class="subject">💬 LinkedIn Message 1 — Introduction</div>
+        <div class="day-badge">DAY 1–2</div>
+      </div>
+      <div class="email-mock-body">
+        <p>Thanks for connecting, [First Name].</p><br>
+        <p>I'll keep it brief — Iconic Investors (AFSL 450822) is actively onboarding advisers who were authorised under SMSF Adviser Network.</p><br>
+        <p>We're boutique, SMSF specialist-friendly, and charge one flat fee — no revenue share. Most advisers are authorised and operating within 2–4 weeks.</p><br>
+        <p>If you're still working out your next move, worth a 15-minute conversation. Happy to answer any questions here or jump on a call — whatever suits you.</p><br>
+        <p>Tony Zulli<br>Director — Iconic Investors<br>AFSL 450822 | iconicinvestors.com.au</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MESSAGE 2 - FOLLOW UP -->
+  <div style="margin-bottom:2rem">
+    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem">
+      <div style="background:var(--gold);color:#000;font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;padding:0.25rem 0.7rem;border-radius:4px">Step 3 — Follow-Up (if no reply)</div>
+      <div style="font-size:0.75rem;color:var(--text-muted)">Send 5 days later</div>
+    </div>
+    <div class="email-mock">
+      <div class="email-mock-header">
+        <div class="subject">💬 LinkedIn Message 2 — Follow-Up</div>
+        <div class="day-badge">DAY 6–7</div>
+      </div>
+      <div class="email-mock-body">
+        <p>Hi [First Name], just following up on my last message.</p><br>
+        <p>I know it's a busy time sorting through your options. If you've already found a home — no problem at all.</p><br>
+        <p>If you're still deciding, happy to answer any questions about Iconic — flat fee structure, what compliance support looks like, how fast we can get you authorised. No pressure.</p><br>
+        <p>Tony Zulli | Iconic Investors | AFSL 450822</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MESSAGE 3 - VALUE ADD -->
+  <div style="margin-bottom:2rem">
+    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem">
+      <div style="background:var(--forest);color:#fff;font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;padding:0.25rem 0.7rem;border-radius:4px">Step 4 — Value Add (if still no reply)</div>
+      <div style="font-size:0.75rem;color:var(--text-muted)">Send 5 days after message 2</div>
+    </div>
+    <div class="email-mock">
+      <div class="email-mock-header">
+        <div class="subject">💬 LinkedIn Message 3 — Final Touch</div>
+        <div class="day-badge">DAY 12</div>
+      </div>
+      <div class="email-mock-body">
+        <p>Hi [First Name], last message from me — I promise.</p><br>
+        <p>A few things worth checking when evaluating dealer groups post-closure:</p><br>
+        <p>→ <strong>Fee model</strong> — flat fee vs revenue share (know what you're signing)<br>
+        → <strong>SMSF support</strong> — do they actually understand your client base?<br>
+        → <strong>Speed</strong> — how long from application to being live?<br>
+        → <strong>Compliance</strong> — dedicated manager or a shared inbox?</p><br>
+        <p>Happy to share how Iconic stacks up on all four. Just reply here or visit iconicinvestors.com.au</p><br>
+        <p>Tony Zulli | Iconic Investors | AFSL 450822</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- INMAIL TEMPLATE -->
+  <div>
+    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem">
+      <div style="background:#0077b5;color:#fff;font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;padding:0.25rem 0.7rem;border-radius:4px">InMail — For advisers you can't connect with</div>
+      <div style="font-size:0.75rem;color:var(--text-muted)">Use LinkedIn Premium InMail credits</div>
+    </div>
+    <div class="email-mock">
+      <div class="email-mock-header" style="background:#0077b5">
+        <div class="subject">📨 LinkedIn InMail — Direct Outreach</div>
+        <div class="day-badge">INMAIL</div>
+      </div>
+      <div class="email-mock-body">
+        <p><strong>Subject:</strong> Your AFSL options after SMSF Adviser Network</p><br>
+        <p>Hi [First Name],</p><br>
+        <p>I'm Tony Zulli, Director of Iconic Investors (AFSL 450822). I'm reaching out to advisers who were previously authorised under SMSF Adviser Network following its closure on 7 April.</p><br>
+        <p>Iconic is a boutique dealer group specialising in SMSF-focused advisers. We offer a flat fee structure (no revenue share), fast onboarding (2–4 weeks), and hands-on compliance support.</p><br>
+        <p>If you're still working out where to operate next, I'd welcome a brief conversation — no obligation.</p><br>
+        <p>Would a 15-minute call this week work for you?</p><br>
+        <p>Tony Zulli<br>Director — Iconic Investors<br>AFSL 450822 | iconicinvestors.com.au</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIPS -->
+  <div style="background:var(--green-light);border-radius:12px;padding:1.5rem;margin-top:2rem">
+    <div style="font-size:0.85rem;font-weight:700;color:var(--forest);margin-bottom:0.75rem">💡 LinkedIn Outreach Tips</div>
+    <div class="cards cols-3">
+      <div class="card">
+        <h3>Search Strategy</h3>
+        <p>Search LinkedIn for adviser names from the spreadsheet. Filter by "Financial Services" + Australia. ASIC rep numbers won't appear — search full name + business name.</p>
+      </div>
+      <div class="card">
+        <h3>Profile First</h3>
+        <p>Before connecting, ensure Tony Zulli's LinkedIn profile is updated with Iconic Investors as current role and AFSL 450822 in the bio. Credibility matters.</p>
+      </div>
+      <div class="card">
+        <h3>Timing</h3>
+        <p>Best days to message: Tuesday–Thursday, 8–10am AEST. Avoid Monday mornings and Friday afternoons. Response rates drop significantly on weekends.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 TIMELINE -->
+<section class="section" id="timeline">
+  <div class="section-eyebrow">11 — Campaign Timeline</div>
+  <h2 class="section-title">4-Week <span>Execution Plan</span></h2>
+  <p class="section-sub">From first email to first AR authorised — 30-day target.</p>
+
+  <div class="timeline" style="max-width:600px">
+    <div class="tl-item gold">
+      <div class="tl-dot"></div>
+      <div class="tl-week">Week 1 — Days 1–7</div>
+      <div class="tl-title">Email + SMS Launch</div>
+      <ul class="tl-items">
+        <li>Email 1 sent to all 29 contactable advisers</li>
+        <li>SMS 1 sent Day 2</li>
+        <li>GHL pipeline created and loaded</li>
+        <li>/afsl-transition landing page live</li>
+        <li>Meta ads submitted for review</li>
+      </ul>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-week">Week 2 — Days 8–14</div>
+      <div class="tl-title">Follow-Up + Phone Outreach</div>
+      <ul class="tl-items">
+        <li>Email 2 sent Day 5</li>
+        <li>SMS 2 sent Day 7</li>
+        <li>Phone calls to 35 advisers with numbers</li>
+        <li>Meta ads running — leads captured to GHL</li>
+        <li>Email 3 sent Day 12</li>
+      </ul>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-week">Week 3 — Days 15–21</div>
+      <div class="tl-title">Meetings + Applications</div>
+      <ul class="tl-items">
+        <li>Discovery calls happening</li>
+        <li>Application packs sent to interested advisers</li>
+        <li>Research remaining 45 (no contact details)</li>
+        <li>Ongoing Meta lead nurture</li>
+      </ul>
+    </div>
+    <div class="tl-item gold">
+      <div class="tl-dot"></div>
+      <div class="tl-week">Week 4 — Days 22–30</div>
+      <div class="tl-title">Compliance Review + Authorisation</div>
+      <ul class="tl-items">
+        <li>First AR documents under review</li>
+        <li>ASIC notifications submitted</li>
+        <li>🎯 Target: First AR authorised by Day 30</li>
+        <li>Campaign report to Tony and business partner</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 12 SIGN-OFF -->
+<section class="section" id="signoff">
+  <div class="section-eyebrow">12 — Sign-Off</div>
+  <h2 class="section-title">Items Needing <span>Tony's Approval</span></h2>
+  <p class="section-sub">Everything is built and ready. These are the only items that need your sign-off before we go live.</p>
+
+  <div style="max-width:650px">
+    <div class="signoff-item">
+      <div class="signoff-num">1</div>
+      <div class="signoff-text">
+        <strong>Email Copy — 3 emails</strong>
+        <span>Approve the tone, content and sign-off name (Tony Zulli or Tony?)</span>
+      </div>
+    </div>
+    <div class="signoff-item">
+      <div class="signoff-num">2</div>
+      <div class="signoff-text">
+        <strong>Calendar Booking Link</strong>
+        <span>Provide your calendar URL for the CTA in emails, SMS and landing page</span>
+      </div>
+    </div>
+    <div class="signoff-item">
+      <div class="signoff-num">3</div>
+      <div class="signoff-text">
+        <strong>Send-From Email Address</strong>
+        <span>Confirm: info@iconicinvestors.com.au or antonio@iconicinvestors.com.au?</span>
+      </div>
+    </div>
+    <div class="signoff-item">
+      <div class="signoff-num">4</div>
+      <div class="signoff-text">
+        <strong>Landing Page /afsl-transition</strong>
+        <span>Approve content — ARIA will inject into Framer once confirmed</span>
+      </div>
+    </div>
+    <div class="signoff-item">
+      <div class="signoff-num">5</div>
+      <div class="signoff-text">
+        <strong>One-Pager PDF</strong>
+        <span>Approve content for design. Tony bio + stats needed to complete it.</span>
+      </div>
+    </div>
+    <div class="signoff-item">
+      <div class="signoff-num">6</div>
+      <div class="signoff-text">
+        <strong>GHL Pipeline Creation</strong>
+        <span>Approve pipeline structure — ARIA will build in GHL immediately after</span>
+      </div>
+    </div>
+    <div class="signoff-item">
+      <div class="signoff-num">7</div>
+      <div class="signoff-text">
+        <strong>Meta Ads Budget</strong>
+        <span>What daily/weekly budget for the Facebook/Instagram campaign?</span>
+      </div>
+    </div>
+    <div class="signoff-item">
+      <div class="signoff-num">8</div>
+      <div class="signoff-text">
+        <strong>Onboarding Documents</strong>
+        <span>Confirm: do you have AR Application Form + Compliance Declaration templates ready?</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:2.5rem;background:var(--forest);border-radius:12px;padding:2rem;max-width:650px">
+    <div style="color:var(--gold);font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem">Ready to Launch</div>
+    <div style="color:#fff;font-size:1.1rem;font-weight:800;margin-bottom:0.5rem">Everything is built. Give the word.</div>
+    <div style="color:rgba(255,255,255,0.55);font-size:0.85rem;line-height:1.65">ARIA has 80 contacts loaded in GHL, 29 emails ready to send, the landing page content prepared for Framer injection, and the GHL pipeline ready to build. Your sign-off is the only thing standing between now and the first email hitting inboxes.</div>
+  </div>
+</section>
+
+</main>
+
+<script>
+  // Active nav highlighting on scroll
+  const sections = document.querySelectorAll('.section');
+  const navLinks = document.querySelectorAll('.sidebar nav a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => link.classList.remove('active'));
+        const id = entry.target.id;
+        const active = document.querySelector(`.sidebar nav a[href="#${id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
